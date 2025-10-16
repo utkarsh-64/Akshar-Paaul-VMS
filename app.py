@@ -228,34 +228,6 @@ def admin_required(f):
 
 # Routes
 
-# Serve React App
-@app.route('/')
-def serve():
-    if app.static_folder and os.path.exists(os.path.join(app.static_folder, 'index.html')):
-        return send_from_directory(app.static_folder, 'index.html')
-    else:
-        return jsonify({'message': 'API is running. Frontend not built yet.'}), 200
-
-@app.route('/<path:path>')
-def static_proxy(path):
-    # Serve API routes normally
-    if path.startswith('api/'):
-        return jsonify({'error': 'Not found'}), 404
-    
-    # Try to serve static file
-    try:
-        file_path = os.path.join(app.static_folder, path)
-        if os.path.exists(file_path) and os.path.isfile(file_path):
-            return send_from_directory(app.static_folder, path)
-    except:
-        pass
-    
-    # Fallback to index.html for React Router
-    try:
-        return send_from_directory(app.static_folder, 'index.html')
-    except:
-        return jsonify({'error': 'Frontend not found'}), 404
-
 # Authentication Routes
 @app.route('/api/auth/login/', methods=['POST'])
 def login():
@@ -1760,6 +1732,30 @@ def init_db():
             print("Akshar Paaul NGO admin account created: AksharPaaulNGO/admin123")
         
         db.session.commit()
+
+# Serve React App - MUST BE LAST
+@app.route('/')
+def serve():
+    if app.static_folder and os.path.exists(os.path.join(app.static_folder, 'index.html')):
+        return send_from_directory(app.static_folder, 'index.html')
+    else:
+        return jsonify({'message': 'API is running. Frontend not built yet.'}), 200
+
+@app.route('/<path:path>')
+def static_proxy(path):
+    # Try to serve static file first
+    try:
+        file_path = os.path.join(app.static_folder, path)
+        if os.path.exists(file_path) and os.path.isfile(file_path):
+            return send_from_directory(app.static_folder, path)
+    except:
+        pass
+    
+    # Fallback to index.html for React Router (for all non-API routes)
+    try:
+        return send_from_directory(app.static_folder, 'index.html')
+    except:
+        return jsonify({'error': 'Not found'}), 404
 
 if __name__ == '__main__':
     init_db()
