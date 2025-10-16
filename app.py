@@ -57,7 +57,7 @@ db = SQLAlchemy(app)
 # CORS configuration - allow credentials for session cookies
 CORS(app, 
      supports_credentials=True,
-     origins=['http://localhost:3000'],
+     origins=['http://localhost:3000', 'https://*.vercel.app', 'https://akshar-paaul-vms.onrender.com'],
      allow_headers=['Content-Type', 'Authorization'],
      expose_headers=['Set-Cookie'],
      methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
@@ -240,10 +240,17 @@ def serve():
 
 @app.route('/<path:path>')
 def static_proxy(path):
-    try:
+    # Serve API routes normally
+    if path.startswith('api/'):
+        return jsonify({'error': 'Not found'}), 404
+    
+    # Try to serve static file
+    file_path = os.path.join(app.static_folder, path)
+    if os.path.exists(file_path) and os.path.isfile(file_path):
         return send_from_directory(app.static_folder, path)
-    except:
-        return send_from_directory(app.static_folder, 'index.html')
+    
+    # Fallback to index.html for React Router
+    return send_from_directory(app.static_folder, 'index.html')
 
 # Authentication Routes
 @app.route('/api/auth/login/', methods=['POST'])
