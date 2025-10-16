@@ -1776,6 +1776,24 @@ def static_proxy(path):
     
     return jsonify({'error': 'Frontend not found', 'path': path, 'static_folder': app.static_folder}), 404
 
+# Error handlers
+@app.errorhandler(404)
+def not_found_error(error):
+    # If it's an API request, return JSON
+    if request.path.startswith('/api/'):
+        return jsonify({'error': 'API endpoint not found'}), 404
+    
+    # For all other requests, serve React app
+    if app.static_folder:
+        try:
+            index_path = os.path.join(app.static_folder, 'index.html')
+            if os.path.exists(index_path):
+                return send_from_directory(app.static_folder, 'index.html')
+        except:
+            pass
+    
+    return jsonify({'error': 'Page not found'}), 404
+
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
