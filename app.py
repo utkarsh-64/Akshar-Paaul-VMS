@@ -13,9 +13,7 @@ import secrets
 # Load environment variables from .env file
 load_dotenv()
 
-# Check if build folder exists, otherwise use None
-build_folder = 'frontend/build' if os.path.exists('frontend/build') else None
-app = Flask(__name__, static_folder=build_folder, static_url_path='')
+app = Flask(__name__, static_folder='frontend/build', static_url_path='')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-here')
 
 # Session configuration - CRITICAL for OAuth
@@ -245,12 +243,18 @@ def static_proxy(path):
         return jsonify({'error': 'Not found'}), 404
     
     # Try to serve static file
-    file_path = os.path.join(app.static_folder, path)
-    if os.path.exists(file_path) and os.path.isfile(file_path):
-        return send_from_directory(app.static_folder, path)
+    try:
+        file_path = os.path.join(app.static_folder, path)
+        if os.path.exists(file_path) and os.path.isfile(file_path):
+            return send_from_directory(app.static_folder, path)
+    except:
+        pass
     
     # Fallback to index.html for React Router
-    return send_from_directory(app.static_folder, 'index.html')
+    try:
+        return send_from_directory(app.static_folder, 'index.html')
+    except:
+        return jsonify({'error': 'Frontend not found'}), 404
 
 # Authentication Routes
 @app.route('/api/auth/login/', methods=['POST'])
