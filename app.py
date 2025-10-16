@@ -35,11 +35,17 @@ google = oauth.register(
     }
 )
 
-# Database configuration with Supabase support
+# Database configuration
 DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///volunteer_system.db')
 
-# Handle Supabase SSL requirement
-if DATABASE_URL.startswith('postgresql://') and 'supabase.co' in DATABASE_URL:
+# Convert postgres:// to postgresql:// for SQLAlchemy and add SSL for production
+if DATABASE_URL.startswith('postgres://'):
+    DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql+pg8000://', 1)
+elif DATABASE_URL.startswith('postgresql://'):
+    DATABASE_URL = DATABASE_URL.replace('postgresql://', 'postgresql+pg8000://', 1)
+
+# Add SSL for production databases
+if 'postgresql+pg8000://' in DATABASE_URL and ('supabase.co' in DATABASE_URL or 'vercel' in DATABASE_URL):
     if '?sslmode=' not in DATABASE_URL:
         DATABASE_URL += '?sslmode=require'
 
@@ -1743,19 +1749,34 @@ def serve():
 
 @app.route('/<path:path>')
 def static_proxy(path):
-    # Try to serve static file first
-    try:
-        file_path = os.path.join(app.static_folder, path)
-        if os.path.exists(file_path) and os.path.isfile(file_path):
-            return send_from_directory(app.static_folder, path)
-    except:
-        pass
+    print(f"Static proxy called with path: {path}")
+    print(f"Static folder: {app.static_folder}")
     
-    # Fallback to index.html for React Router (for all non-API routes)
-    try:
-        return send_from_directory(app.static_folder, 'index.html')
-    except:
-        return jsonify({'error': 'Not found'}), 404
+    # Skip API routes
+    if path.startswith('api/'):
+        return jsonify({'error': 'API endpoint not found'}), 404
+    
+    # Try to serve static file first
+    if app.static_folder:
+        try:
+            file_path = os.path.join(app.static_folder, path)
+            print(f"Checking file: {file_path}")
+            if os.path.exists(file_path) and os.path.isfile(file_path):
+                return send_from_directory(app.static_folder, path)
+        except Exception as e:
+            print(f"Error serving static file: {e}")
+    
+    # Fallback to index.html for React Router
+    if app.static_folder:
+        try:
+            index_path = os.path.join(app.static_folder, 'index.html')
+            print(f"Fallback to index.html: {index_path}")
+            if os.path.exists(index_path):
+                return send_from_directory(app.static_folder, 'index.html')
+        except Exception as e:
+            print(f"Error serving index.html: {e}")
+    
+    return jsonify({'error': 'Frontend not found', 'path': path, 'static_folder': app.static_folder}), 404
 
 if __name__ == '__main__':
     init_db()
