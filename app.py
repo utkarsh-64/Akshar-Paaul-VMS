@@ -13,7 +13,9 @@ import secrets
 # Load environment variables from .env file
 load_dotenv()
 
-app = Flask(__name__, static_folder='frontend/build', static_url_path='')
+# Check if build folder exists, otherwise use None
+build_folder = 'frontend/build' if os.path.exists('frontend/build') else None
+app = Flask(__name__, static_folder=build_folder, static_url_path='')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-here')
 
 # Session configuration - CRITICAL for OAuth
@@ -231,10 +233,10 @@ def admin_required(f):
 # Serve React App
 @app.route('/')
 def serve():
-    try:
+    if app.static_folder and os.path.exists(os.path.join(app.static_folder, 'index.html')):
         return send_from_directory(app.static_folder, 'index.html')
-    except:
-        return "React app not built. Run 'cd frontend && npm run build' first."
+    else:
+        return jsonify({'message': 'API is running. Frontend not built yet.'}), 200
 
 @app.route('/<path:path>')
 def static_proxy(path):
