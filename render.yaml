@@ -2,7 +2,7 @@ services:
   - type: web
     name: volunteerhub-backend
     env: python
-    runtime: python-3.10.0
+    runtime: python-3.11.0
     buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn app:app"
     envVars:
@@ -14,3 +14,4 @@ services:
         sync: false
       - key: GOOGLE_CLIENT_SECRET
         sync: false
+
