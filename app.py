@@ -38,14 +38,12 @@ google = oauth.register(
 # Database configuration
 DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///volunteer_system.db')
 
-# Convert postgres:// to postgresql:// for SQLAlchemy and add SSL for production
+# Convert postgres:// to postgresql:// for SQLAlchemy (Render uses postgres://)
 if DATABASE_URL.startswith('postgres://'):
-    DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql+pg8000://', 1)
-elif DATABASE_URL.startswith('postgresql://'):
-    DATABASE_URL = DATABASE_URL.replace('postgresql://', 'postgresql+pg8000://', 1)
+    DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
 
 # Add SSL for production databases
-if 'postgresql+pg8000://' in DATABASE_URL and ('supabase.co' in DATABASE_URL or 'vercel' in DATABASE_URL):
+if DATABASE_URL.startswith('postgresql://') and ('supabase.co' in DATABASE_URL or 'render.com' in DATABASE_URL):
     if '?sslmode=' not in DATABASE_URL:
         DATABASE_URL += '?sslmode=require'
 
