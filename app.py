@@ -38,17 +38,33 @@ google = oauth.register(
 # Database configuration
 DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///volunteer_system.db')
 
-# Convert postgres:// to postgresql:// for SQLAlchemy (Render uses postgres://)
+# Convert postgres:// to postgresql:// for SQLAlchemy
 if DATABASE_URL.startswith('postgres://'):
     DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
 
-# Add SSL for production databases
-if DATABASE_URL.startswith('postgresql://') and ('supabase.co' in DATABASE_URL or 'render.com' in DATABASE_URL):
+# Supabase requires specific SSL configuration
+if 'supabase.co' in DATABASE_URL:
+    # Remove existing SSL params and add the correct ones
+    if '?' in DATABASE_URL:
+        DATABASE_URL = DATABASE_URL.split('?')[0]
+    DATABASE_URL += '?sslmode=require&sslcert=&sslkey=&sslrootcert='
+elif DATABASE_URL.startswith('postgresql://') and 'render.com' in DATABASE_URL:
     if '?sslmode=' not in DATABASE_URL:
         DATABASE_URL += '?sslmode=require'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Connection pool settings for Supabase
+if 'supabase.co' in DATABASE_URL:
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        'pool_pre_ping': True,
+        'pool_recycle': 300,
+        'connect_args': {
+            'connect_timeout': 10,
+            'sslmode': 'require'
+        }
+    }
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
 # Create uploads directory if it doesn't exist
