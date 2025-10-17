@@ -1794,6 +1794,12 @@ def not_found_error(error):
     
     return jsonify({'error': 'Page not found'}), 404
 
-if __name__ == '__main__':
+# Initialize database when app starts (for production)
+try:
     init_db()
+    print("✅ Database initialized successfully")
+except Exception as e:
+    print(f"❌ Database initialization error: {e}")
+
+if __name__ == '__main__':
     app.run(debug=True)
