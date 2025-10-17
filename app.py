@@ -351,7 +351,7 @@ def google_callback():
         
         if not user_info:
             print("❌ No userinfo in token")
-            return redirect('http://localhost:3000/?oauth=error')
+            return redirect('/?oauth=error')
         
         print(f"✅ User info: {user_info.get('email')}")
         
@@ -401,13 +401,13 @@ def google_callback():
         print(f"Session after: {dict(session)}")
         
         # Redirect to frontend with success
-        return redirect('http://localhost:3000/dashboard?oauth=success')
+        return redirect('/dashboard?oauth=success')
         
     except Exception as e:
         print(f"❌ OAuth error: {str(e)}")
         import traceback
         traceback.print_exc()
-        return redirect('http://localhost:3000/?oauth=error')
+        return redirect('/?oauth=error')
 
 @app.route('/api/auth/google/login', methods=['GET'])
 def google_login():
@@ -424,7 +424,7 @@ def google_login():
         print(f"❌ Error initiating OAuth: {str(e)}")
         import traceback
         traceback.print_exc()
-        return redirect('http://localhost:3000/?oauth=error')
+        return redirect('/?oauth=error')
 
 # Work Log Routes
 @app.route('/api/volunteers/work-logs/', methods=['GET'])
