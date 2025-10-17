@@ -235,25 +235,44 @@ def admin_required(f):
 # Authentication Routes
 @app.route('/api/auth/login/', methods=['POST'])
 def login():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-    
-    user = User.query.filter_by(username=username).first()
-    
-    if user and check_password_hash(user.password_hash, password):
-        session['user_id'] = user.id
-        return jsonify({
-            'success': True,
-            'user': {
-                'id': user.id,
-                'username': user.username,
-                'role': user.role,
-                'email': user.email
-            }
-        })
-    
-    return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
+    try:
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
+        
+        print(f"🔐 Login attempt: username={username}")
+        
+        # Check if any users exist
+        user_count = User.query.count()
+        print(f"👥 Total users in database: {user_count}")
+        
+        user = User.query.filter_by(username=username).first()
+        
+        if not user:
+            print(f"❌ User '{username}' not found")
+            return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
+        
+        print(f"✅ User found: {user.username}, role: {user.role}")
+        
+        if check_password_hash(user.password_hash, password):
+            session['user_id'] = user.id
+            print(f"✅ Login successful for {username}")
+            return jsonify({
+                'success': True,
+                'user': {
+                    'id': user.id,
+                    'username': user.username,
+                    'role': user.role,
+                    'email': user.email
+                }
+            })
+        else:
+            print(f"❌ Invalid password for {username}")
+            return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
+            
+    except Exception as e:
+        print(f"❌ Login error: {str(e)}")
+        return jsonify({'success': False, 'error': 'Login failed'}), 500
 
 @app.route('/api/auth/logout/', methods=['GET'])
 @login_required
