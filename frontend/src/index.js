@@ -6,7 +6,8 @@ import axios from 'axios';
 
 // Configure axios to send credentials (cookies) with every request
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://localhost:5000';
+// Use relative URLs since frontend and backend are on same domain
+axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
