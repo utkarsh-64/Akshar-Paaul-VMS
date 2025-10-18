@@ -5,9 +5,9 @@ const GoogleOAuthButton = () => {
 
   const handleGoogleLogin = () => {
     setLoading(true);
-    // Redirect directly to backend OAuth endpoint
+    // Redirect directly to backend OAuth endpoint (use relative URL for production)
     // This ensures the session is maintained throughout the OAuth flow
-    window.location.href = 'http://localhost:5000/api/auth/google/login';
+    window.location.href = '/api/auth/google/login';
   };
 
   return (
