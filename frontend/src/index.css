@@ -4627,4 +4627,43 @@ table tr td {
 .popup table,
 .popup table * {
   color: #000000 !important;
+}/* F
+ix status badges visibility */
+.status-badge,
+span[style*="backgroundColor"],
+span[style*="background-color"] {
+  color: #ffffff !important;
+}
+
+/* Specific status colors */
+.status-pending,
+span[style*="#d97706"],
+span[style*="rgb(217, 119, 6)"] {
+  background-color: #d97706 !important;
+  color: #ffffff !important;
+}
+
+.status-approved,
+span[style*="#059669"],
+span[style*="rgb(5, 150, 105)"] {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+}
+
+.status-rejected,
+span[style*="#dc2626"],
+span[style*="rgb(220, 38, 38)"] {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+/* Force visibility for all inline styled elements with background colors */
+[style*="backgroundColor: #"],
+[style*="background-color: #"] {
+  color: #ffffff !important;
+}
+
+/* Table cell content */
+table td span {
+  color: #ffffff !important;
 }
