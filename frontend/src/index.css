@@ -4726,4 +4726,18 @@ tr[style*="background"] *,
 td[style*="background"],
 td[style*="background"] * {
   color: #000000 !important;
+}/* 
+FINAL FIX - BLACK TEXT ON WHITE/LIGHT BACKGROUNDS ONLY */
+.card, .card *,
+.modal, .modal *,
+.stat-card, .stat-card *,
+table tbody, table tbody *,
+[style*="white"], [style*="white"] *,
+[style*="#fff"], [style*="#fff"] *,
+[style*="#f8"], [style*="#f8"] *,
+[style*="#f9"], [style*="#f9"] *,
+[style*="rgb(248"], [style*="rgb(248"] *,
+[style*="rgb(249"], [style*="rgb(249"] *,
+[style*="rgb(255"], [style*="rgb(255"] * {
+  color: #000000 !important;
 }
