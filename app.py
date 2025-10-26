@@ -1333,6 +1333,9 @@ def get_documents():
 @app.route('/api/volunteers/documents/upload/', methods=['POST'])
 @login_required
 def upload_document():
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'Authentication required'}), 401
     data = request.get_json()
     
     title = data.get('title')
@@ -1863,4 +1866,72 @@ except Exception as e:
     print(f"❌ Database initialization error: {e}")
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True)# General document upload route (for all users)
+@app.route('/api/documents/upload/', methods=['POST'])
+@login_required
+def upload_document_general():
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'Authentication required'}), 401
+    
+    data = request.get_json()
+    
+    title = data.get('title')
+    document_type = data.get('document_type', 'submission')
+    drive_link = data.get('drive_link')
+    project_id = data.get('project_id')
+    team_ids = data.get('team_ids', [])  # List of team IDs for team-specific sharing
+    
+    if not title or not drive_link:
+        return jsonify({'error': 'Title and Google Drive link are required'}), 400
+    
+    # Validate Google Drive link format
+    if 'drive.google.com' not in drive_link and 'docs.google.com' not in drive_link:
+        return jsonify({'error': 'Please provide a valid Google Drive link'}), 400
+    
+    # Validate team IDs if provided
+    if team_ids:
+        if user.role == 'admin':
+            # Admins can share with any team
+            valid_teams = Team.query.filter(Team.id.in_(team_ids)).all()
+            if len(valid_teams) != len(team_ids):
+                return jsonify({'error': 'One or more invalid team IDs provided'}), 400
+        else:
+            # Users can only share with teams they're members of
+            user_team_ids = [membership.team_id for membership in TeamMember.query.filter_by(user_id=user.id).all()]
+            invalid_teams = [team_id for team_id in team_ids if team_id not in user_team_ids]
+            if invalid_teams:
+                return jsonify({'error': 'You can only share documents with teams you are a member of'}), 403
+    
+    try:
+        document = Document(
+            title=title,
+            document_type=document_type,
+            drive_link=drive_link,
+            uploaded_by_id=session['user_id'],
+            project_id=project_id
+        )
+        
+        db.session.add(document)
+        db.session.commit()
+        
+        # Add team access if specified
+        if team_ids:
+            for team_id in team_ids:
+                team_access = DocumentTeamAccess(
+                    document_id=document.id,
+                    team_id=team_id
+                )
+                db.session.add(team_access)
+        
+        db.session.commit()
+        
+        return jsonify({
+            'success': True, 
+            'document_id': document.id,
+            'message': 'Document uploaded successfully'
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Failed to upload document. Please try again.'}), 500
