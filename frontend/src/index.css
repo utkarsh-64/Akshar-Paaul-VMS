@@ -4666,4 +4666,49 @@ span[style*="rgb(220, 38, 38)"] {
 /* Table cell content */
 table td span {
   color: #ffffff !important;
+}/* Fix
+ button text visibility */
+button,
+.btn,
+[role="button"] {
+  color: #000000 !important;
+}
+
+/* Light colored buttons need dark text */
+button[style*="background"],
+button[style*="backgroundColor"],
+.filter-button,
+.tab-button {
+  color: #000000 !important;
+}
+
+/* Specific button fixes */
+button[style*="white"],
+button[style*="#fff"],
+button[style*="rgb(255"],
+.light-button {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+}
+
+/* Filter buttons */
+.filter-btn,
+.status-filter,
+.team-filter {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+}
+
+/* Ensure all button text is visible */
+button span,
+.btn span,
+button div,
+.btn div {
+  color: inherit !important;
+}
+
+/* Override any inherited white text on buttons */
+button *,
+.btn * {
+  color: #000000 !important;
 }
