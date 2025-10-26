@@ -612,6 +612,24 @@ def get_project_updates(project_id):
 @app.route('/api/projects/<int:project_id>/updates/create/', methods=['POST'])
 @login_required
 def create_project_update(project_id):
+    user = User.query.get(session['user_id'])
+    project = Project.query.get_or_404(project_id)
+    
+    # Check if user can update this project
+    can_update = False
+    if user.role == 'admin':
+        can_update = True
+    elif project.volunteer_id == user.id:
+        can_update = True
+    elif project.is_team_project and project.team_id:
+        # Check if user is a team member
+        is_member = TeamMember.query.filter_by(team_id=project.team_id, user_id=user.id).first()
+        if is_member:
+            can_update = True
+    
+    if not can_update:
+        return jsonify({'error': 'You do not have permission to update this project'}), 403
+    
     data = request.get_json()
     
     update = ProjectUpdate(
@@ -653,14 +671,16 @@ def approve_project(project_id):
     if action == 'approve':
         project.status = 'approved'
         project.approved_by_id = session['user_id']
+        message = 'Project approved successfully'
     elif action == 'reject':
         project.status = 'rejected'
         project.approved_by_id = session['user_id']
+        message = 'Project rejected successfully'
     else:
         return jsonify({'error': 'Invalid action'}), 400
     
     db.session.commit()
-    return jsonify({'success': True, 'message': f'Project {action}d successfully'})
+    return jsonify({'success': True, 'message': message})
 
 @app.route('/api/projects/<int:project_id>/delete/', methods=['DELETE'])
 @login_required
@@ -1328,15 +1348,20 @@ def upload_document():
     if 'drive.google.com' not in drive_link and 'docs.google.com' not in drive_link:
         return jsonify({'error': 'Please provide a valid Google Drive link'}), 400
     
-    # Validate team IDs if provided (admin only feature)
+    # Validate team IDs if provided
     user = User.query.get(session['user_id'])
-    if team_ids and user.role == 'admin':
-        # Validate that all team IDs exist
-        valid_teams = Team.query.filter(Team.id.in_(team_ids)).all()
-        if len(valid_teams) != len(team_ids):
-            return jsonify({'error': 'One or more invalid team IDs provided'}), 400
-    elif team_ids and user.role != 'admin':
-        return jsonify({'error': 'Only admins can share documents with specific teams'}), 403
+    if team_ids:
+        if user.role == 'admin':
+            # Admins can share with any team
+            valid_teams = Team.query.filter(Team.id.in_(team_ids)).all()
+            if len(valid_teams) != len(team_ids):
+                return jsonify({'error': 'One or more invalid team IDs provided'}), 400
+        else:
+            # Volunteers can only share with teams they're members of
+            user_team_ids = [membership.team_id for membership in TeamMember.query.filter_by(user_id=user.id).all()]
+            invalid_teams = [team_id for team_id in team_ids if team_id not in user_team_ids]
+            if invalid_teams:
+                return jsonify({'error': 'You can only share documents with teams you are a member of'}), 403
     
     try:
         document = Document(
@@ -1742,9 +1767,10 @@ def batch_approve_team_logs(team_id):
         
         db.session.commit()
         
+        action_text = 'approved' if action == 'approved' else 'rejected'
         return jsonify({
             'success': True,
-            'message': f'{len(updated_logs)} work logs {action} successfully',
+            'message': f'{len(updated_logs)} work logs {action_text} successfully',
             'updated_count': len(updated_logs)
         })
         
