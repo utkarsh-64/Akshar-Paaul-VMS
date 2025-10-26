@@ -406,7 +406,6 @@ const TeamDetail = ({ team, onClose }) => {
 
   const renderDocuments = () => (
     <div>
-      {/* Admin Document Management */}
       <div style={{ marginBottom: '20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
           <h4>Team Documents ({teamDocuments.length})</h4>
@@ -418,59 +417,54 @@ const TeamDetail = ({ team, onClose }) => {
           </button>
         </div>
           
-          {showDocumentForm && (
-            <div style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '4px', backgroundColor: '#f9f9f9', marginBottom: '20px' }}>
-              <h5>Add Document to {team.name}</h5>
-              <form onSubmit={handleDocumentSubmit}>
-                <div className="form-group">
-                  <label>Document Title:</label>
-                  <input
-                    type="text"
-                    value={documentData.title}
-                    onChange={(e) => setDocumentData({...documentData, title: e.target.value})}
-                    placeholder="e.g., Team Guidelines, Project Resources"
-                    required
-                  />
-                </div>
-                
-                <div className="form-group">
-                  <label>Document Type:</label>
-                  <select
-                    value={documentData.document_type}
-                    onChange={(e) => setDocumentData({...documentData, document_type: e.target.value})}
-                  >
-                    <option value="signed">NGO Signed Document</option>
-                    <option value="proposal">Project Proposal</option>
-                    <option value="update">Project Update</option>
-                  </select>
-                </div>
-                
-                <div className="form-group">
-                  <label>Google Drive Link:</label>
-                  <input
-                    type="url"
-                    value={documentData.drive_link}
-                    onChange={(e) => setDocumentData({...documentData, drive_link: e.target.value})}
-                    placeholder="https://drive.google.com/file/d/..."
-                    required
-                  />
-                  <small style={{ color: '#666', fontSize: '12px' }}>
-                    Make sure the link is publicly accessible or shared with team members
-                  </small>
-                </div>
-                
-                <button type="submit" className="btn btn-success">
-                  Add Document
-                </button>
-              </form>
-            </div>
-          )}
-        </div>
-      )}
-      
-      {!user?.role === 'admin' && (
-        <h4>Team Documents ({teamDocuments.length})</h4>
-      )}
+        {showDocumentForm && (
+          <div style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '4px', backgroundColor: '#f9f9f9', marginBottom: '20px' }}>
+            <h5>Add Document to {team.name}</h5>
+            <form onSubmit={handleDocumentSubmit}>
+              <div className="form-group">
+                <label>Document Title:</label>
+                <input
+                  type="text"
+                  value={documentData.title}
+                  onChange={(e) => setDocumentData({...documentData, title: e.target.value})}
+                  placeholder="e.g., Team Guidelines, Project Resources"
+                  required
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Document Type:</label>
+                <select
+                  value={documentData.document_type}
+                  onChange={(e) => setDocumentData({...documentData, document_type: e.target.value})}
+                >
+                  <option value="signed">NGO Signed Document</option>
+                  <option value="proposal">Project Proposal</option>
+                  <option value="update">Project Update</option>
+                </select>
+              </div>
+              
+              <div className="form-group">
+                <label>Google Drive Link:</label>
+                <input
+                  type="url"
+                  value={documentData.drive_link}
+                  onChange={(e) => setDocumentData({...documentData, drive_link: e.target.value})}
+                  placeholder="https://drive.google.com/file/d/..."
+                  required
+                />
+                <small style={{ color: '#666', fontSize: '12px' }}>
+                  Make sure the link is publicly accessible or shared with team members
+                </small>
+              </div>
+              
+              <button type="submit" className="btn btn-success">
+                Add Document
+              </button>
+            </form>
+          </div>
+        )}
+      </div>
       
       {/* Documents List */}
       {teamDocuments.length === 0 ? (
@@ -540,7 +534,8 @@ const TeamDetail = ({ team, onClose }) => {
             </div>
           ))}
         </div>
-      </div>
+      )}
+    </div>
   )
 
   // Main component return
@@ -595,8 +590,6 @@ const TeamDetail = ({ team, onClose }) => {
             className={`tab-button ${activeTab === 'documents' ? 'active' : ''}`}
             onClick={() => setActiveTab('documents')}
           >
-            📄 Documents ({teamDocuments.length})
-          </button>
             📄 Documents ({teamDocuments.length})
           </button>
         </div>
