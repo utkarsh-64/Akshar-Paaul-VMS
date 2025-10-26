@@ -4711,4 +4711,66 @@ button div,
 button *,
 .btn * {
   color: #000000 !important;
+}/* AGGRESSIV
+E TEXT VISIBILITY FIXES */
+
+/* Navigation and header text */
+nav, nav *, 
+.navbar, .navbar *,
+header, header *,
+.nav-item, .nav-link {
+  color: #ffffff !important;
+}
+
+/* Table headers */
+th, thead th, 
+.table-header,
+table thead tr th {
+  color: #ffffff !important;
+  background-color: #4a5568 !important;
+}
+
+/* Table content - force dark text on light backgrounds */
+td, tbody td,
+.table-cell,
+table tbody tr td {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+}
+
+/* Filter and navigation buttons */
+.nav-button,
+.filter-button,
+button[class*="nav"],
+button[class*="filter"] {
+  color: #ffffff !important;
+  background-color: #4a5568 !important;
+}
+
+/* Light background areas need dark text */
+.light-bg, .white-bg,
+[style*="background: white"],
+[style*="background-color: white"],
+[style*="background: #fff"],
+[style*="background-color: #fff"] {
+  color: #000000 !important;
+}
+
+/* Volunteer names and user info */
+.volunteer-name,
+.user-name,
+small[style*="color"] {
+  color: #666666 !important;
+}
+
+/* Override any problematic inherited colors */
+* {
+  text-shadow: none !important;
+}
+
+/* Ensure readability in all contexts */
+.container *, 
+.main-content *,
+.dashboard * {
+  color: inherit !important;
 }
