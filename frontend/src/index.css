@@ -284,21 +284,41 @@ body {
   font-size: 14px;
 }
 
+/* Force dark input styling */
 .form-group input,
 .form-group textarea,
-.form-group select {
+.form-group select,
+input,
+textarea,
+select {
   width: 100%;
   padding: 12px 16px;
   border: 2px solid rgba(71, 85, 105, 0.5);
   border-radius: 8px;
   font-size: 14px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: rgba(15, 23, 42, 0.8) !important;
-  color: #f1f5f9 !important;
+  background: #1e293b !important;
+  color: #ffffff !important;
   position: relative;
   backdrop-filter: blur(10px);
-  cursor: text;
-  caret-color: #3b82f6;
+  cursor: text !important;
+  caret-color: #3b82f6 !important;
+}
+
+/* Force text visibility in all contexts */
+* {
+  color: inherit;
+}
+
+/* Ensure modal and dialog text is visible */
+.modal input,
+.dialog input,
+.popup input,
+[role="dialog"] input,
+[role="modal"] input {
+  background: #1e293b !important;
+  color: #ffffff !important;
+  caret-color: #3b82f6 !important;
 }
 
 .form-group input:focus,
@@ -4426,4 +4446,56 @@ ed Form Inputs - Premium Design */
 .enhanced-input:active,
 .enhanced-textarea:active {
   transform: scale(0.995);
+}
+/* 
+FORCE TEXT VISIBILITY - OVERRIDE ALL STYLES */
+input[type="text"],
+input[type="email"], 
+input[type="password"],
+input[type="url"],
+textarea,
+select {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+  border: 1px solid #475569 !important;
+  caret-color: #3b82f6 !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+select:focus {
+  background-color: #334155 !important;
+  color: #ffffff !important;
+  border-color: #3b82f6 !important;
+  outline: none !important;
+}
+
+/* Fix placeholder text */
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8 !important;
+  opacity: 1 !important;
+}
+
+/* Remove any conflicting cursor styles */
+.custom-cursor-dot,
+.custom-cursor-outline,
+.cursor-trail {
+  display: none !important;
+}
+
+/* Force normal cursor everywhere */
+* {
+  cursor: auto !important;
+}
+
+input, textarea {
+  cursor: text !important;
+}
+
+button, a, [role="button"] {
+  cursor: pointer !important;
 }
