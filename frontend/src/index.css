@@ -4712,3 +4712,18 @@ button *,
 .btn * {
   color: #000000 !important;
 }
+/* ULTIMATE FIX - BLACK TEXT ON ALL LIGHT BACKGROUNDS */
+table tbody tr,
+table tbody tr *,
+tbody tr,
+tbody tr *,
+tbody td,
+tbody td *,
+.table-row,
+.table-row *,
+tr[style*="background"],
+tr[style*="background"] *,
+td[style*="background"],
+td[style*="background"] * {
+  color: #000000 !important;
+}
