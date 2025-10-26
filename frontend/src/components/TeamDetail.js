@@ -541,7 +541,7 @@ const TeamDetail = ({ team, onClose }) => {
           ))}
         </div>
       </div>
-  );
+  )
 
   // Main component return
   return (
