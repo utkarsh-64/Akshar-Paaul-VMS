@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import CursorFollower from './CursorFollower';
+
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -89,7 +89,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <CursorFollower />
+
       <div className="container fade-in">
       {/* Hero Section */}
       <div className="hero-section">

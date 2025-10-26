@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Register from './Register';
-import CursorFollower from './CursorFollower';
+
 import GoogleOAuthButton from './GoogleOAuthButton';
 
 const Login = () => {
@@ -54,7 +54,6 @@ const Login = () => {
   if (showRegister) {
     return (
       <>
-        <CursorFollower />
         <div className="split-login-container">
           <Register
             onClose={() => setShowRegister(false)}
@@ -67,7 +66,6 @@ const Login = () => {
 
   return (
     <>
-      <CursorFollower />
       <div className="split-login-container">
       {/* Left Panel - Login Form */}
       <div className="login-left-panel">
