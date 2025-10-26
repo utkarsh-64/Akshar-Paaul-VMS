@@ -4509,14 +4509,22 @@ DARK THEME EVERYWHERE */
   background-color: inherit;
 }
 
-/* Modal and dialog backgrounds */
+/* Modal and dialog backgrounds - KEEP WHITE BG BUT FORCE DARK TEXT */
 .modal,
 .dialog,
 .popup,
 [role="dialog"],
 [role="modal"] {
-  background: #2d3748 !important;
-  color: #ffffff !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+.modal *,
+.dialog *,
+.popup *,
+[role="dialog"] *,
+[role="modal"] * {
+  color: #000000 !important;
 }
 
 /* Team detail and other content areas */
@@ -4562,4 +4570,61 @@ div {
 /* Labels */
 label {
   color: #ffffff !important;
+}
+
+/* 
+EMERGENCY FIX - FORCE READABLE TEXT */
+/* White background areas need dark text */
+div[style*="background: white"],
+div[style*="background-color: white"],
+div[style*="background: #fff"],
+div[style*="background-color: #fff"],
+.white-bg,
+.light-bg {
+  color: #000000 !important;
+}
+
+.white-bg *,
+.light-bg *,
+div[style*="background: white"] *,
+div[style*="background-color: white"] *,
+div[style*="background: #fff"] *,
+div[style*="background-color: #fff"] * {
+  color: #000000 !important;
+}
+
+/* Team member names and details */
+.member-name,
+.member-info,
+.team-member,
+.user-info {
+  color: #000000 !important;
+}
+
+/* Project details in modals */
+.project-info,
+.project-details,
+.project-meta {
+  color: #000000 !important;
+}
+
+/* Work log details */
+.work-log-info,
+.log-details {
+  color: #000000 !important;
+}
+
+/* Table content in light backgrounds */
+table tr td {
+  color: #000000 !important;
+}
+
+/* Override any inherited colors in light modals */
+.modal table,
+.modal table *,
+.dialog table,
+.dialog table *,
+.popup table,
+.popup table * {
+  color: #000000 !important;
 }
