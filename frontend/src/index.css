@@ -10,8 +10,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #0f172a;
-  color: #f1f5f9;
+  background: #1a202c !important;
+  color: #ffffff !important;
   min-height: 100vh;
   line-height: 1.6;
   overflow-x: hidden;
@@ -134,20 +134,19 @@ body {
 }
 
 .card {
-  background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+  background: #2d3748 !important;
   border-radius: 16px;
   padding: 32px;
   margin-bottom: 24px;
   box-shadow:
     0 4px 20px rgba(0, 0, 0, 0.3),
-    0 1px 3px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(71, 85, 105, 0.3);
+    0 1px 3px rgba(0, 0, 0, 0.2);
+  border: 1px solid #4a5568;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   animation: slideInUp 0.6s ease-out;
-  backdrop-filter: blur(10px);
+  color: #ffffff !important;
 }
 
 .card::before {
@@ -2486,7 +2485,7 @@ Screen Login Design */
 
 /* Testimonial */
 .testimonial {
-  color: #fff;
+  color: #ffffff;
 }
 
 .testimonial blockquote {
@@ -3856,7 +3855,7 @@ or Follower - Interactive Robot */
   button {
     cursor: none;
   }
-  
+
   /* Keep default cursor for input fields so you can see where you're typing */
   input,
   textarea,
@@ -4447,10 +4446,11 @@ ed Form Inputs - Premium Design */
 .enhanced-textarea:active {
   transform: scale(0.995);
 }
+
 /* 
 FORCE TEXT VISIBILITY - OVERRIDE ALL STYLES */
 input[type="text"],
-input[type="email"], 
+input[type="email"],
 input[type="password"],
 input[type="url"],
 textarea,
@@ -4492,10 +4492,74 @@ textarea::placeholder {
   cursor: auto !important;
 }
 
-input, textarea {
+input,
+textarea {
   cursor: text !important;
 }
 
-button, a, [role="button"] {
+button,
+a,
+[role="button"] {
   cursor: pointer !important;
+}
+
+/* FORCE 
+DARK THEME EVERYWHERE */
+* {
+  background-color: inherit;
+}
+
+/* Modal and dialog backgrounds */
+.modal,
+.dialog,
+.popup,
+[role="dialog"],
+[role="modal"] {
+  background: #2d3748 !important;
+  color: #ffffff !important;
+}
+
+/* Team detail and other content areas */
+.team-detail,
+.project-detail,
+.content-area,
+.main-content {
+  background: #2d3748 !important;
+  color: #ffffff !important;
+}
+
+/* Tab content */
+.tab-content {
+  background: #2d3748 !important;
+  color: #ffffff !important;
+}
+
+/* List items and table rows */
+.list-item,
+.table-row,
+tr,
+td {
+  color: #ffffff !important;
+}
+
+/* Headers and titles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #ffffff !important;
+}
+
+/* Paragraphs and text */
+p,
+span,
+div {
+  color: #ffffff !important;
+}
+
+/* Labels */
+label {
+  color: #ffffff !important;
 }
