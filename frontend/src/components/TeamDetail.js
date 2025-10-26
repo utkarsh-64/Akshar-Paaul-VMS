@@ -407,17 +407,16 @@ const TeamDetail = ({ team, onClose }) => {
   const renderDocuments = () => (
     <div>
       {/* Admin Document Management */}
-      {user?.role === 'admin' && (
-        <div style={{ marginBottom: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
-            <h4>Team Documents ({teamDocuments.length})</h4>
-            <button 
-              className="btn btn-primary"
-              onClick={() => setShowDocumentForm(!showDocumentForm)}
-            >
-              {showDocumentForm ? 'Cancel' : 'Add Document'}
-            </button>
-          </div>
+      <div style={{ marginBottom: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+          <h4>Team Documents ({teamDocuments.length})</h4>
+          <button 
+            className="btn btn-primary"
+            onClick={() => setShowDocumentForm(!showDocumentForm)}
+          >
+            {showDocumentForm ? 'Cancel' : 'Add Document'}
+          </button>
+        </div>
           
           {showDocumentForm && (
             <div style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '4px', backgroundColor: '#f9f9f9', marginBottom: '20px' }}>
@@ -483,7 +482,7 @@ const TeamDetail = ({ team, onClose }) => {
         }}>
           <div style={{ fontSize: '48px', marginBottom: '10px' }}>📄</div>
           <div>No documents shared with this team</div>
-          {user?.role === 'admin' && <small>Use the "Add Document" button above to share documents</small>}
+          <small>Use the "Add Document" button above to share documents with your team</small>
         </div>
       ) : (
         <div style={{ display: 'grid', gap: '15px' }}>
@@ -541,8 +540,7 @@ const TeamDetail = ({ team, onClose }) => {
             </div>
           ))}
         </div>
-      )}
-    </div>
+      </div>
   );
 
   return (
